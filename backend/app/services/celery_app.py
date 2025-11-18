@@ -5,12 +5,10 @@ from app.core.config import settings
 celery_app = Celery(
     "ctis_worker",
     broker=settings.CELERY_BROKER_URL,
-    backend=settings.CELERY_RESULT_BACKEND
+    backend=settings.CELERY_RESULT_BACKEND,
 )
 
-celery_app.conf.task_routes = {
-    "app.services.tasks.*": {"queue": "main-queue"}
-}
+celery_app.conf.task_routes = {"app.services.tasks.*": {"queue": "main-queue"}}
 
 celery_app.conf.update(
     task_serializer="json",
@@ -22,8 +20,8 @@ celery_app.conf.update(
 
 # Scheduled tasks configuration
 celery_app.conf.beat_schedule = {
-    'sync-trials-daily': {
-        'task': 'app.services.tasks.sync_trials_daily',
-        'schedule': crontab(hour=2, minute=0),  # Run daily at 2 AM UTC
+    "sync-trials-daily": {
+        "task": "app.services.tasks.sync_trials_daily",
+        "schedule": crontab(hour=2, minute=0),  # Run daily at 2 AM UTC
     },
 }

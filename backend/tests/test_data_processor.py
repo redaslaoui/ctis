@@ -3,7 +3,6 @@ Tests for the clinical trial data processor
 """
 
 import pytest
-from datetime import datetime
 from app.services.data_processor import TrialDataProcessor
 
 
@@ -17,15 +16,11 @@ class TestTrialDataProcessor:
 
     def test_extract_field(self, processor):
         """Test nested field extraction"""
-        data = {
-            "protocolSection": {
-                "identificationModule": {
-                    "nctId": "NCT00000001"
-                }
-            }
-        }
+        data = {"protocolSection": {"identificationModule": {"nctId": "NCT00000001"}}}
 
-        result = processor.extract_field(data, "protocolSection.identificationModule.nctId")
+        result = processor.extract_field(
+            data, "protocolSection.identificationModule.nctId"
+        )
         assert result == "NCT00000001"
 
     def test_extract_field_with_default(self, processor):
@@ -66,7 +61,9 @@ class TestTrialDataProcessor:
 
     def test_classify_outcome_success(self, processor):
         """Test outcome classification for successful trials"""
-        results_text = "The trial met primary endpoint with statistically significant results"
+        results_text = (
+            "The trial met primary endpoint with statistically significant results"
+        )
         result = processor.classify_outcome("COMPLETED", results_text, has_results=True)
 
         assert result == "Success"
@@ -88,14 +85,11 @@ class TestTrialDataProcessor:
         """Test sponsor information extraction"""
         protocol_section = {
             "sponsorCollaboratorsModule": {
-                "leadSponsor": {
-                    "name": "Pharma Corp",
-                    "class": "Industry"
-                },
+                "leadSponsor": {"name": "Pharma Corp", "class": "Industry"},
                 "collaborators": [
                     {"name": "University Hospital"},
-                    {"name": "Research Institute"}
-                ]
+                    {"name": "Research Institute"},
+                ],
             }
         }
 
@@ -109,9 +103,7 @@ class TestTrialDataProcessor:
     def test_extract_conditions(self, processor):
         """Test conditions extraction"""
         protocol_section = {
-            "conditionsModule": {
-                "conditions": ["Cancer", "Solid Tumor"]
-            }
+            "conditionsModule": {"conditions": ["Cancer", "Solid Tumor"]}
         }
 
         result = processor.extract_conditions(protocol_section)
@@ -125,14 +117,8 @@ class TestTrialDataProcessor:
         protocol_section = {
             "armsInterventionsModule": {
                 "interventions": [
-                    {
-                        "name": "Drug A",
-                        "type": "Drug"
-                    },
-                    {
-                        "name": "Placebo",
-                        "type": "Other"
-                    }
+                    {"name": "Drug A", "type": "Drug"},
+                    {"name": "Placebo", "type": "Other"},
                 ]
             }
         }
@@ -149,11 +135,9 @@ class TestTrialDataProcessor:
             "outcomesModule": {
                 "primaryOutcomes": [
                     {"measure": "Overall Survival"},
-                    {"measure": "Progression-Free Survival"}
+                    {"measure": "Progression-Free Survival"},
                 ],
-                "secondaryOutcomes": [
-                    {"measure": "Quality of Life"}
-                ]
+                "secondaryOutcomes": [{"measure": "Quality of Life"}],
             }
         }
 
@@ -171,7 +155,7 @@ class TestTrialDataProcessor:
                 "eligibilityCriteria": "Age 18-65, diagnosis confirmed",
                 "sex": "All",
                 "minimumAge": "18 Years",
-                "maximumAge": "65 Years"
+                "maximumAge": "65 Years",
             }
         }
 
@@ -187,18 +171,9 @@ class TestTrialDataProcessor:
         protocol_section = {
             "contactsLocationsModule": {
                 "locations": [
-                    {
-                        "country": "United States",
-                        "facility": "Mayo Clinic"
-                    },
-                    {
-                        "country": "United States",
-                        "facility": "Johns Hopkins"
-                    },
-                    {
-                        "country": "Canada",
-                        "facility": "Toronto General"
-                    }
+                    {"country": "United States", "facility": "Mayo Clinic"},
+                    {"country": "United States", "facility": "Johns Hopkins"},
+                    {"country": "Canada", "facility": "Toronto General"},
                 ]
             }
         }
@@ -218,7 +193,7 @@ class TestTrialDataProcessor:
             "conditions": ["Cancer"],
             "interventions": ["Drug A"],
             "briefSummary": "Testing drug A for cancer",
-            "primaryOutcomes": ["Overall Survival"]
+            "primaryOutcomes": ["Overall Survival"],
         }
 
         result = processor.create_composite_text(trial_data)
@@ -236,20 +211,13 @@ class TestTrialDataProcessor:
             "protocolSection": {
                 "identificationModule": {
                     "nctId": "NCT00000001",
-                    "officialTitle": "Test Clinical Trial"
+                    "officialTitle": "Test Clinical Trial",
                 },
-                "descriptionModule": {
-                    "briefSummary": "Brief summary of the trial"
-                },
-                "designModule": {
-                    "phases": ["PHASE3"],
-                    "studyType": "Interventional"
-                },
-                "statusModule": {
-                    "overallStatus": "COMPLETED"
-                }
+                "descriptionModule": {"briefSummary": "Brief summary of the trial"},
+                "designModule": {"phases": ["PHASE3"], "studyType": "Interventional"},
+                "statusModule": {"overallStatus": "COMPLETED"},
             },
-            "hasResults": False
+            "hasResults": False,
         }
 
         result = processor.process_study(raw_study)

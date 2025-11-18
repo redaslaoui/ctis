@@ -1,12 +1,9 @@
-from langchain.agents import AgentExecutor
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.schema.runnable import RunnablePassthrough
+from langchain.prompts import ChatPromptTemplate
 from langchain.schema import StrOutputParser
 from app.core.config import settings
 from app.rag.retriever import ClinicalTrialRetriever, SuccessfulTrialRetriever
 from app.rag.vector_store import TrialVectorStore
-from typing import Dict, Any, List
 import logging
 import json
 
@@ -18,14 +15,14 @@ class TrialAnalyzerAgent:
 
     def __init__(self):
         self.llm = ChatOpenAI(
-            model="gpt-4",
-            api_key=settings.OPENAI_API_KEY,
-            temperature=0
+            model="gpt-4", api_key=settings.OPENAI_API_KEY, temperature=0
         )
 
         self.vector_store = TrialVectorStore()
         self.retriever = ClinicalTrialRetriever(vector_store=self.vector_store, limit=5)
-        self.success_retriever = SuccessfulTrialRetriever(vector_store=self.vector_store, limit=5)
+        self.success_retriever = SuccessfulTrialRetriever(
+            vector_store=self.vector_store, limit=5
+        )
 
     def _build_trial_context(self, trial_data: dict) -> str:
         """Build context string from trial data"""
@@ -83,8 +80,11 @@ class TrialAnalyzerAgent:
             trial_context = self._build_trial_context(trial_data)
 
             # Risk analysis prompt
-            risk_prompt = ChatPromptTemplate.from_messages([
-                ("system", """You are an expert clinical trial risk analyst.
+            risk_prompt = ChatPromptTemplate.from_messages(
+                [
+                    (
+                        "system",
+                        """You are an expert clinical trial risk analyst.
 
 Analyze the provided trial and predict the risk of failure based on:
 1. Similar historical trials and their outcomes
@@ -99,23 +99,27 @@ Provide your analysis in the following JSON format:
     "confidence": <float between 0-1>,
     "risk_factors": [<list of specific risk factors>],
     "reasoning": "<brief explanation>"
-}}"""),
-                ("user", """Current Trial:
+}}""",
+                    ),
+                    (
+                        "user",
+                        """Current Trial:
 {trial_context}
 
 Similar Historical Trials:
 {context}
 
-Analyze the risk of failure for this trial.""")
-            ])
+Analyze the risk of failure for this trial.""",
+                    ),
+                ]
+            )
 
             # Run analysis
             chain = risk_prompt | self.llm | StrOutputParser()
 
-            response = chain.invoke({
-                "trial_context": trial_context,
-                "context": context
-            })
+            response = chain.invoke(
+                {"trial_context": trial_context, "context": context}
+            )
 
             # Parse response
             try:
@@ -127,10 +131,12 @@ Analyze the risk of failure for this trial.""")
                     "risk_score": 0.5,
                     "confidence": 0.3,
                     "risk_factors": ["Unable to parse detailed analysis"],
-                    "reasoning": response
+                    "reasoning": response,
                 }
 
-            logger.info(f"Risk analysis completed: risk_score={result.get('risk_score')}")
+            logger.info(
+                f"Risk analysis completed: risk_score={result.get('risk_score')}"
+            )
             return result
 
         except Exception as e:
@@ -138,7 +144,7 @@ Analyze the risk of failure for this trial.""")
             return {
                 "risk_score": 0.0,
                 "confidence": 0.0,
-                "risk_factors": [f"Error: {str(e)}"]
+                "risk_factors": [f"Error: {str(e)}"],
             }
 
     def recommend_optimizations(self, trial_data: dict) -> list:
@@ -167,14 +173,19 @@ Analyze the risk of failure for this trial.""")
                 return ["No similar successful trials found for comparison"]
 
             # Build context from successful trials
-            context = "\n\n---\n\n".join([doc.page_content for doc in successful_trials])
+            context = "\n\n---\n\n".join(
+                [doc.page_content for doc in successful_trials]
+            )
 
             # Create trial context
             trial_context = self._build_trial_context(trial_data)
 
             # Recommendation prompt
-            rec_prompt = ChatPromptTemplate.from_messages([
-                ("system", """You are an expert clinical trial consultant specializing in trial optimization.
+            rec_prompt = ChatPromptTemplate.from_messages(
+                [
+                    (
+                        "system",
+                        """You are an expert clinical trial consultant specializing in trial optimization.
 
 Based on successful historical trials, provide specific, actionable recommendations to improve trial success.
 
@@ -185,23 +196,27 @@ Focus on:
 4. Patient selection criteria
 5. Site selection and management
 
-Provide recommendations as a JSON array of strings."""),
-                ("user", """Current Trial:
+Provide recommendations as a JSON array of strings.""",
+                    ),
+                    (
+                        "user",
+                        """Current Trial:
 {trial_context}
 
 Successful Similar Trials:
 {context}
 
-Provide specific optimization recommendations for this trial.""")
-            ])
+Provide specific optimization recommendations for this trial.""",
+                    ),
+                ]
+            )
 
             # Run recommendation
             chain = rec_prompt | self.llm | StrOutputParser()
 
-            response = chain.invoke({
-                "trial_context": trial_context,
-                "context": context
-            })
+            response = chain.invoke(
+                {"trial_context": trial_context, "context": context}
+            )
 
             # Parse response
             try:
@@ -213,7 +228,11 @@ Provide specific optimization recommendations for this trial.""")
             except json.JSONDecodeError:
                 # Split by newlines or numbered list
                 lines = response.strip().split("\n")
-                recommendations = [line.strip("- ").strip("0123456789. ") for line in lines if line.strip()]
+                recommendations = [
+                    line.strip("- ").strip("0123456789. ")
+                    for line in lines
+                    if line.strip()
+                ]
                 return recommendations[:10]  # Limit to top 10
 
         except Exception as e:

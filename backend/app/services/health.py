@@ -37,14 +37,14 @@ class HealthCheckService:
             return {
                 "status": "healthy",
                 "message": "Database connection successful",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
         except Exception as e:
             logger.error(f"Database health check failed: {e}")
             return {
                 "status": "unhealthy",
                 "message": f"Database connection failed: {str(e)}",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
 
     def check_redis(self) -> Dict[str, Any]:
@@ -63,20 +63,20 @@ class HealthCheckService:
                     "status": "healthy",
                     "message": "Redis connection successful",
                     "stats": stats,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.utcnow().isoformat(),
                 }
             else:
                 return {
                     "status": "unhealthy",
                     "message": "Redis client not initialized",
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.utcnow().isoformat(),
                 }
         except Exception as e:
             logger.error(f"Redis health check failed: {e}")
             return {
                 "status": "unhealthy",
                 "message": f"Redis connection failed: {str(e)}",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
 
     def check_weaviate(self) -> Dict[str, Any]:
@@ -88,8 +88,6 @@ class HealthCheckService:
         """
         try:
             vector_store = TrialVectorStore()
-            # Try to get schema
-            schema = vector_store.client.schema.get()
 
             # Get statistics
             stats = vector_store.get_statistics()
@@ -98,14 +96,14 @@ class HealthCheckService:
                 "status": "healthy",
                 "message": "Weaviate connection successful",
                 "stats": stats,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
         except Exception as e:
             logger.error(f"Weaviate health check failed: {e}")
             return {
                 "status": "unhealthy",
                 "message": f"Weaviate connection failed: {str(e)}",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
 
     def check_clinicaltrials_api(self) -> Dict[str, Any]:
@@ -117,8 +115,7 @@ class HealthCheckService:
         """
         try:
             response = requests.get(
-                "https://clinicaltrials.gov/api/v2/version",
-                timeout=5
+                "https://clinicaltrials.gov/api/v2/version", timeout=5
             )
 
             if response.status_code == 200:
@@ -126,20 +123,20 @@ class HealthCheckService:
                     "status": "healthy",
                     "message": "ClinicalTrials.gov API accessible",
                     "api_version": response.json(),
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.utcnow().isoformat(),
                 }
             else:
                 return {
                     "status": "degraded",
                     "message": f"ClinicalTrials.gov API returned status {response.status_code}",
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.utcnow().isoformat(),
                 }
         except Exception as e:
             logger.error(f"ClinicalTrials.gov API health check failed: {e}")
             return {
                 "status": "unhealthy",
                 "message": f"ClinicalTrials.gov API check failed: {str(e)}",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
 
     def check_openai_api(self) -> Dict[str, Any]:
@@ -154,7 +151,7 @@ class HealthCheckService:
                 return {
                     "status": "unhealthy",
                     "message": "OpenAI API key not configured",
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.utcnow().isoformat(),
                 }
 
             # We won't make an actual API call to avoid costs
@@ -162,14 +159,14 @@ class HealthCheckService:
             return {
                 "status": "healthy",
                 "message": "OpenAI API key configured",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
         except Exception as e:
             logger.error(f"OpenAI API health check failed: {e}")
             return {
                 "status": "unhealthy",
                 "message": f"OpenAI API check failed: {str(e)}",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
 
     def comprehensive_health_check(self) -> Dict[str, Any]:
@@ -184,7 +181,7 @@ class HealthCheckService:
             "redis": self.check_redis(),
             "weaviate": self.check_weaviate(),
             "clinicaltrials_api": self.check_clinicaltrials_api(),
-            "openai_api": self.check_openai_api()
+            "openai_api": self.check_openai_api(),
         }
 
         # Determine overall status
@@ -200,7 +197,7 @@ class HealthCheckService:
         return {
             "overall_status": overall_status,
             "checks": checks,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
         }
 
 

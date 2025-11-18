@@ -22,7 +22,7 @@ async def health_check() -> Dict[str, Any]:
     return {
         "status": "healthy",
         "service": "Clinical Trial Intelligence Platform",
-        "version": "0.1.0"
+        "version": "0.1.0",
     }
 
 
@@ -95,10 +95,7 @@ async def clear_cache(pattern: str = "*") -> Dict[str, Any]:
     vector_store = CachedTrialVectorStore()
     vector_store.invalidate_cache(pattern if pattern != "*" else None)
 
-    return {
-        "status": "success",
-        "message": f"Cache cleared for pattern: {pattern}"
-    }
+    return {"status": "success", "message": f"Cache cleared for pattern: {pattern}"}
 
 
 @router.get("/monitoring/metrics", status_code=status.HTTP_200_OK)
@@ -118,10 +115,7 @@ async def get_metrics() -> Dict[str, Any]:
         return {
             "vector_store": stats,
             "cache": cache_stats_data,
-            "timestamp": stats.get("last_updated")
+            "timestamp": stats.get("last_updated"),
         }
     except Exception as e:
-        return {
-            "error": str(e),
-            "status": "error"
-        }
+        return {"error": str(e), "status": "error"}

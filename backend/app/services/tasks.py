@@ -2,8 +2,6 @@ from app.services.celery_app import celery_app
 from app.services.clinicaltrials_api import ClinicalTrialsAPIClient
 from app.services.data_processor import TrialDataProcessor
 from app.rag.vector_store import TrialVectorStore
-from app.core.database import SessionLocal
-from app.models.trial import Trial
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 import logging
@@ -16,7 +14,7 @@ def ingest_trials_batch(
     self,
     query: Optional[str] = None,
     max_results: int = 1000,
-    filters: Optional[Dict[str, Any]] = None
+    filters: Optional[Dict[str, Any]] = None,
 ):
     """
     Background task to ingest a batch of trials from ClinicalTrials.gov
@@ -36,13 +34,13 @@ def ingest_trials_batch(
         total_skipped = 0
         total_errors = 0
 
-        logger.info(f"Starting batch ingestion: query={query}, max_results={max_results}")
+        logger.info(
+            f"Starting batch ingestion: query={query}, max_results={max_results}"
+        )
 
         # Fetch studies from API
         studies = api_client.search_studies(
-            query=query,
-            filters=filters,
-            max_results=max_results
+            query=query, filters=filters, max_results=max_results
         )
 
         for study in studies:
@@ -60,7 +58,11 @@ def ingest_trials_batch(
                 existing_trials = vector_store.find_similar_trials(
                     query=nct_id,
                     limit=1,
-                    filters={"path": ["nctId"], "operator": "Equal", "valueText": nct_id}
+                    filters={
+                        "path": ["nctId"],
+                        "operator": "Equal",
+                        "valueText": nct_id,
+                    },
                 )
 
                 if existing_trials:
@@ -77,13 +79,13 @@ def ingest_trials_batch(
                 # Update progress every 10 trials
                 if total_processed % 10 == 0:
                     self.update_state(
-                        state='PROGRESS',
+                        state="PROGRESS",
                         meta={
-                            'processed': total_processed,
-                            'added': total_added,
-                            'skipped': total_skipped,
-                            'errors': total_errors
-                        }
+                            "processed": total_processed,
+                            "added": total_added,
+                            "skipped": total_skipped,
+                            "errors": total_errors,
+                        },
                     )
 
             except Exception as e:
@@ -97,11 +99,11 @@ def ingest_trials_batch(
         )
 
         return {
-            'status': 'completed',
-            'processed': total_processed,
-            'added': total_added,
-            'skipped': total_skipped,
-            'errors': total_errors
+            "status": "completed",
+            "processed": total_processed,
+            "added": total_added,
+            "skipped": total_skipped,
+            "errors": total_errors,
         }
 
     except Exception as e:
@@ -148,13 +150,11 @@ def sync_trials_daily():
                 total_errors += 1
                 continue
 
-        logger.info(f"Daily sync completed: synced={total_synced}, errors={total_errors}")
+        logger.info(
+            f"Daily sync completed: synced={total_synced}, errors={total_errors}"
+        )
 
-        return {
-            'status': 'completed',
-            'synced': total_synced,
-            'errors': total_errors
-        }
+        return {"status": "completed", "synced": total_synced, "errors": total_errors}
 
     except Exception as e:
         logger.error(f"Daily sync failed: {e}")
@@ -180,8 +180,7 @@ def sync_completed_trials_by_condition(condition: str, max_results: int = 500):
         logger.info(f"Syncing completed trials for condition: {condition}")
 
         studies = api_client.get_completed_trials(
-            condition=condition,
-            max_results=max_results
+            condition=condition, max_results=max_results
         )
 
         for study in studies:
@@ -196,11 +195,7 @@ def sync_completed_trials_by_condition(condition: str, max_results: int = 500):
 
         logger.info(f"Synced {total_synced} completed trials for {condition}")
 
-        return {
-            'status': 'completed',
-            'condition': condition,
-            'synced': total_synced
-        }
+        return {"status": "completed", "condition": condition, "synced": total_synced}
 
     except Exception as e:
         logger.error(f"Failed to sync trials for condition {condition}: {e}")

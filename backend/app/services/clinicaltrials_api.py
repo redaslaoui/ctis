@@ -6,7 +6,7 @@ API Documentation: https://clinicaltrials.gov/data-api/api
 import time
 import logging
 from typing import List, Dict, Any, Optional, Iterator
-from datetime import datetime, timedelta
+from datetime import datetime
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -27,10 +27,7 @@ class ClinicalTrialsAPIClient:
     MAX_PAGE_SIZE = 1000
 
     def __init__(
-        self,
-        max_retries: int = 3,
-        backoff_factor: float = 0.3,
-        timeout: int = 30
+        self, max_retries: int = 3, backoff_factor: float = 0.3, timeout: int = 30
     ):
         """
         Initialize the ClinicalTrials.gov API client
@@ -49,7 +46,7 @@ class ClinicalTrialsAPIClient:
             total=max_retries,
             backoff_factor=backoff_factor,
             status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=["GET", "POST"]
+            allowed_methods=["GET", "POST"],
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
         self.session.mount("https://", adapter)
@@ -69,7 +66,7 @@ class ClinicalTrialsAPIClient:
         self,
         endpoint: str,
         params: Optional[Dict[str, Any]] = None,
-        method: str = "GET"
+        method: str = "GET",
     ) -> Dict[str, Any]:
         """
         Make an API request with rate limiting and error handling
@@ -109,7 +106,7 @@ class ClinicalTrialsAPIClient:
         filters: Optional[Dict[str, Any]] = None,
         fields: Optional[List[str]] = None,
         page_size: int = DEFAULT_PAGE_SIZE,
-        max_results: Optional[int] = None
+        max_results: Optional[int] = None,
     ) -> Iterator[Dict[str, Any]]:
         """
         Search for clinical trials with pagination
@@ -126,10 +123,7 @@ class ClinicalTrialsAPIClient:
         """
         page_size = min(page_size, self.MAX_PAGE_SIZE)
 
-        params = {
-            "pageSize": page_size,
-            "format": "json"
-        }
+        params = {"pageSize": page_size, "format": "json"}
 
         if query:
             params["query.term"] = query
@@ -196,7 +190,7 @@ class ClinicalTrialsAPIClient:
         self,
         date: datetime,
         page_size: int = DEFAULT_PAGE_SIZE,
-        max_results: Optional[int] = None
+        max_results: Optional[int] = None,
     ) -> Iterator[Dict[str, Any]]:
         """
         Get studies updated since a specific date
@@ -211,14 +205,10 @@ class ClinicalTrialsAPIClient:
         """
         date_str = date.strftime("%Y-%m-%d")
 
-        filters = {
-            "lastUpdatePostDate": f"{date_str}"
-        }
+        filters = {"lastUpdatePostDate": f"{date_str}"}
 
         return self.search_studies(
-            filters=filters,
-            page_size=page_size,
-            max_results=max_results
+            filters=filters, page_size=page_size, max_results=max_results
         )
 
     def get_completed_trials(
@@ -226,7 +216,7 @@ class ClinicalTrialsAPIClient:
         condition: Optional[str] = None,
         intervention: Optional[str] = None,
         page_size: int = DEFAULT_PAGE_SIZE,
-        max_results: Optional[int] = None
+        max_results: Optional[int] = None,
     ) -> Iterator[Dict[str, Any]]:
         """
         Get completed clinical trials
@@ -240,9 +230,7 @@ class ClinicalTrialsAPIClient:
         Yields:
             Completed study records
         """
-        filters = {
-            "overallStatus": "COMPLETED"
-        }
+        filters = {"overallStatus": "COMPLETED"}
 
         query_parts = []
         if condition:
@@ -253,10 +241,7 @@ class ClinicalTrialsAPIClient:
         query = " AND ".join(query_parts) if query_parts else None
 
         return self.search_studies(
-            query=query,
-            filters=filters,
-            page_size=page_size,
-            max_results=max_results
+            query=query, filters=filters, page_size=page_size, max_results=max_results
         )
 
     def get_study_fields(self) -> List[str]:

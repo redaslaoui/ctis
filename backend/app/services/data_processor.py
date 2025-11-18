@@ -6,7 +6,6 @@ Handles cleaning, normalization, and transformation
 import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-import re
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +19,7 @@ class TrialDataProcessor:
         "statistically significant",
         "positive results",
         "approved",
-        "efficacy demonstrated"
+        "efficacy demonstrated",
     ]
 
     FAILURE_KEYWORDS = [
@@ -28,20 +27,18 @@ class TrialDataProcessor:
         "not statistically significant",
         "negative results",
         "discontinued for futility",
-        "insufficient efficacy"
+        "insufficient efficacy",
     ]
 
-    TERMINATED_STATUSES = [
-        "TERMINATED",
-        "WITHDRAWN",
-        "SUSPENDED"
-    ]
+    TERMINATED_STATUSES = ["TERMINATED", "WITHDRAWN", "SUSPENDED"]
 
     def __init__(self):
         """Initialize the data processor"""
         pass
 
-    def extract_field(self, data: Dict[str, Any], path: str, default: Any = None) -> Any:
+    def extract_field(
+        self, data: Dict[str, Any], path: str, default: Any = None
+    ) -> Any:
         """
         Safely extract a nested field from the API response
 
@@ -99,10 +96,7 @@ class TrialDataProcessor:
         return None
 
     def classify_outcome(
-        self,
-        status: str,
-        results_text: Optional[str] = None,
-        has_results: bool = False
+        self, status: str, results_text: Optional[str] = None, has_results: bool = False
     ) -> str:
         """
         Classify trial outcome based on status and results
@@ -164,7 +158,7 @@ class TrialDataProcessor:
         return {
             "sponsor": sponsor_name,
             "sponsorType": sponsor_class,
-            "collaborators": collaborators
+            "collaborators": collaborators,
         }
 
     def extract_conditions(self, protocol_section: Dict[str, Any]) -> List[str]:
@@ -199,9 +193,7 @@ class TrialDataProcessor:
 
         if interventions:
             intervention_names = [
-                interv.get("name")
-                for interv in interventions
-                if interv.get("name")
+                interv.get("name") for interv in interventions if interv.get("name")
             ]
 
             # Get the type from the first intervention
@@ -210,7 +202,7 @@ class TrialDataProcessor:
 
         return {
             "interventions": intervention_names,
-            "interventionType": intervention_type
+            "interventionType": intervention_type,
         }
 
     def extract_outcomes(self, protocol_section: Dict[str, Any]) -> Dict[str, Any]:
@@ -243,7 +235,7 @@ class TrialDataProcessor:
 
         return {
             "primaryOutcomes": primary_outcomes,
-            "secondaryOutcomes": secondary_outcomes
+            "secondaryOutcomes": secondary_outcomes,
         }
 
     def extract_eligibility(self, protocol_section: Dict[str, Any]) -> Dict[str, Any]:
@@ -262,7 +254,7 @@ class TrialDataProcessor:
             "eligibilityCriteria": eligibility_module.get("eligibilityCriteria", ""),
             "sex": eligibility_module.get("sex", "All"),
             "minimumAge": eligibility_module.get("minimumAge", "N/A"),
-            "maximumAge": eligibility_module.get("maximumAge", "N/A")
+            "maximumAge": eligibility_module.get("maximumAge", "N/A"),
         }
 
     def extract_locations(self, protocol_section: Dict[str, Any]) -> Dict[str, Any]:
@@ -287,10 +279,7 @@ class TrialDataProcessor:
             if location.get("facility"):
                 facilities.append(location["facility"])
 
-        return {
-            "locationCountries": list(countries),
-            "locationFacilities": facilities
-        }
+        return {"locationCountries": list(countries), "locationFacilities": facilities}
 
     def create_composite_text(self, trial_data: Dict[str, Any]) -> str:
         """
@@ -349,7 +338,9 @@ class TrialDataProcessor:
             # Basic identification
             identification_module = protocol_section.get("identificationModule", {})
             nct_id = identification_module.get("nctId")
-            title = identification_module.get("officialTitle") or identification_module.get("briefTitle", "")
+            title = identification_module.get(
+                "officialTitle"
+            ) or identification_module.get("briefTitle", "")
 
             # Description
             description_module = protocol_section.get("descriptionModule", {})
@@ -368,12 +359,18 @@ class TrialDataProcessor:
             has_results = raw_study.get("hasResults", False)
 
             # Dates
-            start_date = self.parse_date(status_module.get("startDateStruct", {}).get("date"))
-            completion_date = self.parse_date(status_module.get("completionDateStruct", {}).get("date"))
+            start_date = self.parse_date(
+                status_module.get("startDateStruct", {}).get("date")
+            )
+            completion_date = self.parse_date(
+                status_module.get("completionDateStruct", {}).get("date")
+            )
             primary_completion_date = self.parse_date(
                 status_module.get("primaryCompletionDateStruct", {}).get("date")
             )
-            last_update_date = self.parse_date(status_module.get("lastUpdatePostDateStruct", {}).get("date"))
+            last_update_date = self.parse_date(
+                status_module.get("lastUpdatePostDateStruct", {}).get("date")
+            )
 
             # Enrollment
             enrollment_info = design_module.get("enrollmentInfo", {})
@@ -385,11 +382,17 @@ class TrialDataProcessor:
             if design_module.get("designInfo"):
                 design_info = design_module["designInfo"]
                 if design_info.get("allocation"):
-                    study_design_parts.append(f"Allocation: {design_info['allocation']}")
+                    study_design_parts.append(
+                        f"Allocation: {design_info['allocation']}"
+                    )
                 if design_info.get("interventionModel"):
-                    study_design_parts.append(f"Model: {design_info['interventionModel']}")
+                    study_design_parts.append(
+                        f"Model: {design_info['interventionModel']}"
+                    )
                 if design_info.get("primaryPurpose"):
-                    study_design_parts.append(f"Purpose: {design_info['primaryPurpose']}")
+                    study_design_parts.append(
+                        f"Purpose: {design_info['primaryPurpose']}"
+                    )
 
             study_design = "; ".join(study_design_parts) if study_design_parts else ""
 
@@ -403,7 +406,9 @@ class TrialDataProcessor:
 
             # Classify outcome
             results_text = detailed_description or brief_summary
-            outcome_classification = self.classify_outcome(status, results_text, has_results)
+            outcome_classification = self.classify_outcome(
+                status, results_text, has_results
+            )
 
             # Arm count
             arms_module = protocol_section.get("armsInterventionsModule", {})
@@ -443,7 +448,7 @@ class TrialDataProcessor:
                 "studyDesign": study_design,
                 "armCount": arm_count,
                 "dataSource": "ClinicalTrials.gov",
-                "lastSyncedAt": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+                "lastSyncedAt": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
             }
 
             # Create composite text

@@ -3,7 +3,7 @@ Tests for the cache service
 """
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 from app.services.cache import CacheService, cached
 import json
 
@@ -14,7 +14,7 @@ class TestCacheService:
     @pytest.fixture
     def mock_redis(self):
         """Create a mock Redis client"""
-        with patch('app.services.cache.redis.from_url') as mock_from_url:
+        with patch("app.services.cache.redis.from_url") as mock_from_url:
             mock_client = Mock()
             mock_from_url.return_value = mock_client
             mock_client.ping.return_value = True
@@ -96,7 +96,7 @@ class TestCacheService:
             "total_connections_received": 100,
             "total_commands_processed": 1000,
             "keyspace_hits": 800,
-            "keyspace_misses": 200
+            "keyspace_misses": 200,
         }
 
         stats = cache_service.get_stats()
@@ -132,7 +132,7 @@ class TestCacheService:
 
     def test_cache_connection_failure(self):
         """Test cache service with connection failure"""
-        with patch('app.services.cache.redis.from_url') as mock_from_url:
+        with patch("app.services.cache.redis.from_url") as mock_from_url:
             mock_from_url.side_effect = Exception("Connection failed")
 
             cache = CacheService()

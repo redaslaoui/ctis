@@ -24,7 +24,7 @@ class TrialVectorStore:
                 "text2vec-openai": {
                     "model": "text-embedding-3-small",
                     "type": "text",
-                    "vectorizeClassName": False
+                    "vectorizeClassName": False,
                 }
             },
             "properties": [
@@ -33,229 +33,218 @@ class TrialVectorStore:
                     "name": "nctId",
                     "dataType": ["text"],
                     "description": "ClinicalTrials.gov NCT ID",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "title",
                     "dataType": ["text"],
                     "description": "Official trial title",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
                 {
                     "name": "briefSummary",
                     "dataType": ["text"],
                     "description": "Brief summary of the trial",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
                 {
                     "name": "detailedDescription",
                     "dataType": ["text"],
                     "description": "Detailed description of the trial",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
-
                 # Trial Classification
                 {
                     "name": "phase",
                     "dataType": ["text"],
                     "description": "Trial phase (Phase 1, 2, 3, 4)",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "status",
                     "dataType": ["text"],
                     "description": "Trial status (Recruiting, Active, Completed, Terminated)",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "studyType",
                     "dataType": ["text"],
                     "description": "Type of study (Interventional, Observational)",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
-
                 # Condition and Intervention
                 {
                     "name": "conditions",
                     "dataType": ["text[]"],
                     "description": "Medical conditions being studied",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
                 {
                     "name": "interventions",
                     "dataType": ["text[]"],
                     "description": "Interventions or treatments being tested",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
                 {
                     "name": "interventionType",
                     "dataType": ["text"],
                     "description": "Type of intervention (Drug, Device, Procedure)",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
-
                 # Sponsor and Organization
                 {
                     "name": "sponsor",
                     "dataType": ["text"],
                     "description": "Lead sponsor organization",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "sponsorType",
                     "dataType": ["text"],
                     "description": "Type of sponsor (Industry, Academic, Government)",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "collaborators",
                     "dataType": ["text[]"],
                     "description": "Collaborating organizations",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
-
                 # Dates and Timeline
                 {
                     "name": "startDate",
                     "dataType": ["date"],
                     "description": "Trial start date",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "completionDate",
                     "dataType": ["date"],
                     "description": "Trial completion date",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "primaryCompletionDate",
                     "dataType": ["date"],
                     "description": "Primary completion date",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "lastUpdateDate",
                     "dataType": ["date"],
                     "description": "Last update posted date",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
-
                 # Enrollment
                 {
                     "name": "enrollmentCount",
                     "dataType": ["int"],
                     "description": "Actual or anticipated enrollment count",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "enrollmentType",
                     "dataType": ["text"],
                     "description": "Enrollment type (Actual or Anticipated)",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
-
                 # Eligibility
                 {
                     "name": "eligibilityCriteria",
                     "dataType": ["text"],
                     "description": "Eligibility criteria for participants",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
                 {
                     "name": "sex",
                     "dataType": ["text"],
                     "description": "Eligible sex (All, Male, Female)",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "minimumAge",
                     "dataType": ["text"],
                     "description": "Minimum age for eligibility",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "maximumAge",
                     "dataType": ["text"],
                     "description": "Maximum age for eligibility",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
-
                 # Outcomes
                 {
                     "name": "primaryOutcomes",
                     "dataType": ["text[]"],
                     "description": "Primary outcome measures",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
                 {
                     "name": "secondaryOutcomes",
                     "dataType": ["text[]"],
                     "description": "Secondary outcome measures",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
                 {
                     "name": "outcomeClassification",
                     "dataType": ["text"],
                     "description": "Classified outcome (Success, Failure, Terminated, Unknown)",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "hasResults",
                     "dataType": ["boolean"],
                     "description": "Whether results have been posted",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
-
                 # Location
                 {
                     "name": "locationCountries",
                     "dataType": ["text[]"],
                     "description": "Countries where trial is conducted",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "locationFacilities",
                     "dataType": ["text[]"],
                     "description": "Facility names where trial is conducted",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
-
                 # Study Design
                 {
                     "name": "studyDesign",
                     "dataType": ["text"],
                     "description": "Study design information",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
                 {
                     "name": "armCount",
                     "dataType": ["int"],
                     "description": "Number of study arms",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
-
                 # Composite text for rich embeddings
                 {
                     "name": "compositeText",
                     "dataType": ["text"],
                     "description": "Composite text combining key trial information for embedding",
-                    "moduleConfig": {"text2vec-openai": {"skip": False}}
+                    "moduleConfig": {"text2vec-openai": {"skip": False}},
                 },
-
                 # Metadata
                 {
                     "name": "dataSource",
                     "dataType": ["text"],
                     "description": "Data source (e.g., ClinicalTrials.gov)",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
                 },
                 {
                     "name": "lastSyncedAt",
                     "dataType": ["date"],
                     "description": "Last time data was synced",
-                    "moduleConfig": {"text2vec-openai": {"skip": True}}
-                }
-            ]
+                    "moduleConfig": {"text2vec-openai": {"skip": True}},
+                },
+            ],
         }
 
         # Check if class already exists
@@ -283,8 +272,7 @@ class TrialVectorStore:
         """
         try:
             result = self.client.data_object.create(
-                data_object=trial_data,
-                class_name="ClinicalTrial"
+                data_object=trial_data, class_name="ClinicalTrial"
             )
             logger.info(f"Added trial {trial_data.get('nctId')} to vector store")
             return result
@@ -293,10 +281,7 @@ class TrialVectorStore:
             raise
 
     def find_similar_trials(
-        self,
-        query: str,
-        limit: int = 10,
-        filters: Optional[Dict[str, Any]] = None
+        self, query: str, limit: int = 10, filters: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
         """
         Find similar trials using vector search
@@ -311,13 +296,24 @@ class TrialVectorStore:
         """
         try:
             query_builder = (
-                self.client.query
-                .get("ClinicalTrial", [
-                    "nctId", "title", "phase", "status", "sponsor",
-                    "conditions", "interventions", "outcomeClassification",
-                    "enrollmentCount", "startDate", "completionDate",
-                    "briefSummary", "primaryOutcomes"
-                ])
+                self.client.query.get(
+                    "ClinicalTrial",
+                    [
+                        "nctId",
+                        "title",
+                        "phase",
+                        "status",
+                        "sponsor",
+                        "conditions",
+                        "interventions",
+                        "outcomeClassification",
+                        "enrollmentCount",
+                        "startDate",
+                        "completionDate",
+                        "briefSummary",
+                        "primaryOutcomes",
+                    ],
+                )
                 .with_near_text({"concepts": [query]})
                 .with_additional(["distance", "id"])
                 .with_limit(limit)
@@ -333,10 +329,7 @@ class TrialVectorStore:
             raise
 
     def find_by_condition(
-        self,
-        condition: str,
-        phase: Optional[str] = None,
-        limit: int = 20
+        self, condition: str, phase: Optional[str] = None, limit: int = 20
     ) -> List[Dict[str, Any]]:
         """
         Find trials by medical condition
@@ -356,25 +349,32 @@ class TrialVectorStore:
                     {
                         "path": ["conditions"],
                         "operator": "Like",
-                        "valueText": f"*{condition}*"
+                        "valueText": f"*{condition}*",
                     }
-                ]
+                ],
             }
 
             if phase:
-                where_filter["operands"].append({
-                    "path": ["phase"],
-                    "operator": "Equal",
-                    "valueText": phase
-                })
+                where_filter["operands"].append(
+                    {"path": ["phase"], "operator": "Equal", "valueText": phase}
+                )
 
             result = (
-                self.client.query
-                .get("ClinicalTrial", [
-                    "nctId", "title", "phase", "status", "conditions",
-                    "interventions", "sponsor", "enrollmentCount",
-                    "outcomeClassification", "briefSummary"
-                ])
+                self.client.query.get(
+                    "ClinicalTrial",
+                    [
+                        "nctId",
+                        "title",
+                        "phase",
+                        "status",
+                        "conditions",
+                        "interventions",
+                        "sponsor",
+                        "enrollmentCount",
+                        "outcomeClassification",
+                        "briefSummary",
+                    ],
+                )
                 .with_where(where_filter)
                 .with_limit(limit)
                 .do()
@@ -389,7 +389,7 @@ class TrialVectorStore:
         self,
         condition: Optional[str] = None,
         phase: Optional[str] = None,
-        limit: int = 20
+        limit: int = 20,
     ) -> List[Dict[str, Any]]:
         """
         Find successful trials (outcome classified as Success)
@@ -407,36 +407,42 @@ class TrialVectorStore:
                 {
                     "path": ["outcomeClassification"],
                     "operator": "Equal",
-                    "valueText": "Success"
+                    "valueText": "Success",
                 }
             ]
 
             if condition:
-                where_operands.append({
-                    "path": ["conditions"],
-                    "operator": "Like",
-                    "valueText": f"*{condition}*"
-                })
+                where_operands.append(
+                    {
+                        "path": ["conditions"],
+                        "operator": "Like",
+                        "valueText": f"*{condition}*",
+                    }
+                )
 
             if phase:
-                where_operands.append({
-                    "path": ["phase"],
-                    "operator": "Equal",
-                    "valueText": phase
-                })
+                where_operands.append(
+                    {"path": ["phase"], "operator": "Equal", "valueText": phase}
+                )
 
-            where_filter = {
-                "operator": "And",
-                "operands": where_operands
-            }
+            where_filter = {"operator": "And", "operands": where_operands}
 
             result = (
-                self.client.query
-                .get("ClinicalTrial", [
-                    "nctId", "title", "phase", "conditions", "interventions",
-                    "sponsor", "enrollmentCount", "primaryOutcomes",
-                    "briefSummary", "studyDesign"
-                ])
+                self.client.query.get(
+                    "ClinicalTrial",
+                    [
+                        "nctId",
+                        "title",
+                        "phase",
+                        "conditions",
+                        "interventions",
+                        "sponsor",
+                        "enrollmentCount",
+                        "primaryOutcomes",
+                        "briefSummary",
+                        "studyDesign",
+                    ],
+                )
                 .with_where(where_filter)
                 .with_limit(limit)
                 .do()
@@ -452,7 +458,7 @@ class TrialVectorStore:
         query: str,
         filters: Optional[Dict[str, Any]] = None,
         alpha: float = 0.5,
-        limit: int = 10
+        limit: int = 10,
     ) -> List[Dict[str, Any]]:
         """
         Hybrid search combining keyword and vector search
@@ -468,12 +474,22 @@ class TrialVectorStore:
         """
         try:
             query_builder = (
-                self.client.query
-                .get("ClinicalTrial", [
-                    "nctId", "title", "phase", "status", "conditions",
-                    "interventions", "sponsor", "outcomeClassification",
-                    "enrollmentCount", "briefSummary", "primaryOutcomes"
-                ])
+                self.client.query.get(
+                    "ClinicalTrial",
+                    [
+                        "nctId",
+                        "title",
+                        "phase",
+                        "status",
+                        "conditions",
+                        "interventions",
+                        "sponsor",
+                        "outcomeClassification",
+                        "enrollmentCount",
+                        "briefSummary",
+                        "primaryOutcomes",
+                    ],
+                )
                 .with_hybrid(query=query, alpha=alpha)
                 .with_additional(["score", "id"])
                 .with_limit(limit)
@@ -489,10 +505,7 @@ class TrialVectorStore:
             raise
 
     def find_by_sponsor(
-        self,
-        sponsor: str,
-        phase: Optional[str] = None,
-        limit: int = 20
+        self, sponsor: str, phase: Optional[str] = None, limit: int = 20
     ) -> List[Dict[str, Any]]:
         """
         Find trials by sponsor
@@ -507,32 +520,33 @@ class TrialVectorStore:
         """
         try:
             where_operands = [
-                {
-                    "path": ["sponsor"],
-                    "operator": "Like",
-                    "valueText": f"*{sponsor}*"
-                }
+                {"path": ["sponsor"], "operator": "Like", "valueText": f"*{sponsor}*"}
             ]
 
             if phase:
-                where_operands.append({
-                    "path": ["phase"],
-                    "operator": "Equal",
-                    "valueText": phase
-                })
+                where_operands.append(
+                    {"path": ["phase"], "operator": "Equal", "valueText": phase}
+                )
 
-            where_filter = {
-                "operator": "And",
-                "operands": where_operands
-            }
+            where_filter = {"operator": "And", "operands": where_operands}
 
             result = (
-                self.client.query
-                .get("ClinicalTrial", [
-                    "nctId", "title", "phase", "status", "sponsor",
-                    "conditions", "interventions", "enrollmentCount",
-                    "startDate", "completionDate", "outcomeClassification"
-                ])
+                self.client.query.get(
+                    "ClinicalTrial",
+                    [
+                        "nctId",
+                        "title",
+                        "phase",
+                        "status",
+                        "sponsor",
+                        "conditions",
+                        "interventions",
+                        "enrollmentCount",
+                        "startDate",
+                        "completionDate",
+                        "outcomeClassification",
+                    ],
+                )
                 .with_where(where_filter)
                 .with_limit(limit)
                 .do()
@@ -544,10 +558,7 @@ class TrialVectorStore:
             raise
 
     def find_recent_trials(
-        self,
-        days: int = 30,
-        status: Optional[str] = None,
-        limit: int = 20
+        self, days: int = 30, status: Optional[str] = None, limit: int = 20
     ) -> List[Dict[str, Any]]:
         """
         Find recently updated trials
@@ -561,35 +572,40 @@ class TrialVectorStore:
             List of recent trials
         """
         try:
-            cutoff_date = (datetime.utcnow() - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
+            cutoff_date = (datetime.utcnow() - timedelta(days=days)).strftime(
+                "%Y-%m-%dT%H:%M:%SZ"
+            )
 
             where_operands = [
                 {
                     "path": ["lastUpdateDate"],
                     "operator": "GreaterThanEqual",
-                    "valueDate": cutoff_date
+                    "valueDate": cutoff_date,
                 }
             ]
 
             if status:
-                where_operands.append({
-                    "path": ["status"],
-                    "operator": "Equal",
-                    "valueText": status
-                })
+                where_operands.append(
+                    {"path": ["status"], "operator": "Equal", "valueText": status}
+                )
 
-            where_filter = {
-                "operator": "And",
-                "operands": where_operands
-            }
+            where_filter = {"operator": "And", "operands": where_operands}
 
             result = (
-                self.client.query
-                .get("ClinicalTrial", [
-                    "nctId", "title", "phase", "status", "conditions",
-                    "interventions", "sponsor", "lastUpdateDate",
-                    "briefSummary"
-                ])
+                self.client.query.get(
+                    "ClinicalTrial",
+                    [
+                        "nctId",
+                        "title",
+                        "phase",
+                        "status",
+                        "conditions",
+                        "interventions",
+                        "sponsor",
+                        "lastUpdateDate",
+                        "briefSummary",
+                    ],
+                )
                 .with_where(where_filter)
                 .with_limit(limit)
                 .do()
@@ -612,25 +628,45 @@ class TrialVectorStore:
         """
         try:
             result = (
-                self.client.query
-                .get("ClinicalTrial", [
-                    "nctId", "title", "phase", "status", "studyType",
-                    "conditions", "interventions", "interventionType",
-                    "sponsor", "sponsorType", "collaborators",
-                    "startDate", "completionDate", "primaryCompletionDate",
-                    "enrollmentCount", "enrollmentType",
-                    "eligibilityCriteria", "sex", "minimumAge", "maximumAge",
-                    "primaryOutcomes", "secondaryOutcomes",
-                    "outcomeClassification", "hasResults",
-                    "locationCountries", "locationFacilities",
-                    "studyDesign", "armCount", "briefSummary",
-                    "detailedDescription", "lastUpdateDate"
-                ])
-                .with_where({
-                    "path": ["nctId"],
-                    "operator": "Equal",
-                    "valueText": nct_id
-                })
+                self.client.query.get(
+                    "ClinicalTrial",
+                    [
+                        "nctId",
+                        "title",
+                        "phase",
+                        "status",
+                        "studyType",
+                        "conditions",
+                        "interventions",
+                        "interventionType",
+                        "sponsor",
+                        "sponsorType",
+                        "collaborators",
+                        "startDate",
+                        "completionDate",
+                        "primaryCompletionDate",
+                        "enrollmentCount",
+                        "enrollmentType",
+                        "eligibilityCriteria",
+                        "sex",
+                        "minimumAge",
+                        "maximumAge",
+                        "primaryOutcomes",
+                        "secondaryOutcomes",
+                        "outcomeClassification",
+                        "hasResults",
+                        "locationCountries",
+                        "locationFacilities",
+                        "studyDesign",
+                        "armCount",
+                        "briefSummary",
+                        "detailedDescription",
+                        "lastUpdateDate",
+                    ],
+                )
+                .with_where(
+                    {"path": ["nctId"], "operator": "Equal", "valueText": nct_id}
+                )
                 .with_limit(1)
                 .do()
             )
@@ -651,26 +687,20 @@ class TrialVectorStore:
         try:
             # Get total count
             total_result = (
-                self.client.query
-                .aggregate("ClinicalTrial")
-                .with_meta_count()
-                .do()
+                self.client.query.aggregate("ClinicalTrial").with_meta_count().do()
             )
 
-            total_count = total_result.get("data", {}).get("Aggregate", {}).get("ClinicalTrial", [{}])[0].get("meta", {}).get("count", 0)
-
-            # Get count by phase
-            phase_result = (
-                self.client.query
-                .aggregate("ClinicalTrial")
-                .with_group_by_filter(["phase"])
-                .with_meta_count()
-                .do()
+            total_count = (
+                total_result.get("data", {})
+                .get("Aggregate", {})
+                .get("ClinicalTrial", [{}])[0]
+                .get("meta", {})
+                .get("count", 0)
             )
 
             return {
                 "total_trials": total_count,
-                "last_updated": datetime.utcnow().isoformat()
+                "last_updated": datetime.utcnow().isoformat(),
             }
         except Exception as e:
             logger.error(f"Error getting statistics: {e}")

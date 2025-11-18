@@ -3,7 +3,7 @@ Tests for the clinical trial vector store
 """
 
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 from app.rag.vector_store import TrialVectorStore
 
 
@@ -13,7 +13,7 @@ class TestTrialVectorStore:
     @pytest.fixture
     def mock_weaviate_client(self):
         """Create a mock Weaviate client"""
-        with patch('app.rag.vector_store.weaviate.Client') as mock_client:
+        with patch("app.rag.vector_store.weaviate.Client") as mock_client:
             mock_instance = Mock()
             mock_client.return_value = mock_instance
 
@@ -46,7 +46,7 @@ class TestTrialVectorStore:
             "title": "Test Trial",
             "phase": "Phase 3",
             "conditions": ["Cancer"],
-            "interventions": ["Drug A"]
+            "interventions": ["Drug A"],
         }
 
         mock_weaviate_client.data_object.create.return_value = "uuid-123"
@@ -54,8 +54,7 @@ class TestTrialVectorStore:
         result = vector_store.add_trial(trial_data)
 
         mock_weaviate_client.data_object.create.assert_called_once_with(
-            data_object=trial_data,
-            class_name="ClinicalTrial"
+            data_object=trial_data, class_name="ClinicalTrial"
         )
         assert result == "uuid-123"
 
@@ -83,7 +82,7 @@ class TestTrialVectorStore:
                         {
                             "nctId": "NCT00000001",
                             "title": "Similar Trial",
-                            "phase": "Phase 3"
+                            "phase": "Phase 3",
                         }
                     ]
                 }
@@ -113,10 +112,7 @@ class TestTrialVectorStore:
             "data": {
                 "Get": {
                     "ClinicalTrial": [
-                        {
-                            "nctId": "NCT00000001",
-                            "conditions": ["Cancer"]
-                        }
+                        {"nctId": "NCT00000001", "conditions": ["Cancer"]}
                     ]
                 }
             }
@@ -144,10 +140,7 @@ class TestTrialVectorStore:
             "data": {
                 "Get": {
                     "ClinicalTrial": [
-                        {
-                            "nctId": "NCT00000001",
-                            "outcomeClassification": "Success"
-                        }
+                        {"nctId": "NCT00000001", "outcomeClassification": "Success"}
                     ]
                 }
             }
@@ -175,10 +168,7 @@ class TestTrialVectorStore:
             "data": {
                 "Get": {
                     "ClinicalTrial": [
-                        {
-                            "nctId": "NCT00000001",
-                            "title": "Specific Trial"
-                        }
+                        {"nctId": "NCT00000001", "title": "Specific Trial"}
                     ]
                 }
             }
@@ -202,13 +192,7 @@ class TestTrialVectorStore:
         mock_get.with_where.return_value = mock_where
         mock_where.with_limit.return_value = mock_limit
 
-        mock_limit.do.return_value = {
-            "data": {
-                "Get": {
-                    "ClinicalTrial": []
-                }
-            }
-        }
+        mock_limit.do.return_value = {"data": {"Get": {"ClinicalTrial": []}}}
 
         result = vector_store.get_trial_by_nct_id("NCT99999999")
 

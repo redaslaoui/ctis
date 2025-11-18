@@ -38,7 +38,7 @@ class ClinicalTrialRetriever(BaseRetriever):
         self,
         query: str,
         *,
-        run_manager: Optional[CallbackManagerForRetrieverRun] = None
+        run_manager: Optional[CallbackManagerForRetrieverRun] = None,
     ) -> List[Document]:
         """
         Get documents relevant to a query
@@ -57,9 +57,7 @@ class ClinicalTrialRetriever(BaseRetriever):
 
             # Perform vector search
             trials = self.vector_store.find_similar_trials(
-                query=query,
-                limit=limit,
-                filters=filters
+                query=query, limit=limit, filters=filters
             )
 
             # Convert to LangChain documents
@@ -104,7 +102,7 @@ class ClinicalTrialRetriever(BaseRetriever):
                     "status": trial.get("status"),
                     "sponsor": trial.get("sponsor"),
                     "enrollment_count": trial.get("enrollmentCount"),
-                    "outcome_classification": trial.get("outcomeClassification")
+                    "outcome_classification": trial.get("outcomeClassification"),
                 }
 
                 # Add distance if available
@@ -138,7 +136,7 @@ class SuccessfulTrialRetriever(BaseRetriever):
         vector_store: Optional[TrialVectorStore] = None,
         condition: Optional[str] = None,
         phase: Optional[str] = None,
-        limit: int = 10
+        limit: int = 10,
     ):
         """
         Initialize the successful trial retriever
@@ -153,17 +151,14 @@ class SuccessfulTrialRetriever(BaseRetriever):
             vector_store = TrialVectorStore()
 
         super().__init__(
-            vector_store=vector_store,
-            condition=condition,
-            phase=phase,
-            limit=limit
+            vector_store=vector_store, condition=condition, phase=phase, limit=limit
         )
 
     def _get_relevant_documents(
         self,
         query: str,
         *,
-        run_manager: Optional[CallbackManagerForRetrieverRun] = None
+        run_manager: Optional[CallbackManagerForRetrieverRun] = None,
     ) -> List[Document]:
         """
         Get successful trial documents
@@ -181,9 +176,7 @@ class SuccessfulTrialRetriever(BaseRetriever):
 
             # Find successful trials
             trials = self.vector_store.find_successful_trials(
-                condition=condition,
-                phase=self.phase,
-                limit=self.limit
+                condition=condition, phase=self.phase, limit=self.limit
             )
 
             # Convert to documents
@@ -197,7 +190,7 @@ class SuccessfulTrialRetriever(BaseRetriever):
                     f"Interventions: {', '.join(trial.get('interventions', []))}",
                     f"Study Design: {trial.get('studyDesign')}",
                     f"Enrollment: {trial.get('enrollmentCount')}",
-                    f"Primary Outcomes: {'; '.join(trial.get('primaryOutcomes', []))}"
+                    f"Primary Outcomes: {'; '.join(trial.get('primaryOutcomes', []))}",
                 ]
 
                 content = "\n".join(content_parts)
@@ -206,7 +199,7 @@ class SuccessfulTrialRetriever(BaseRetriever):
                     "nct_id": trial.get("nctId"),
                     "phase": trial.get("phase"),
                     "sponsor": trial.get("sponsor"),
-                    "enrollment_count": trial.get("enrollmentCount")
+                    "enrollment_count": trial.get("enrollmentCount"),
                 }
 
                 doc = Document(page_content=content, metadata=metadata)

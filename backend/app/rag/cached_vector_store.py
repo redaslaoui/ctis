@@ -20,10 +20,7 @@ class CachedTrialVectorStore(TrialVectorStore):
 
     @cached("similar_trials", ttl=1800)  # 30 minutes
     def find_similar_trials(
-        self,
-        query: str,
-        limit: int = 10,
-        filters: Optional[Dict[str, Any]] = None
+        self, query: str, limit: int = 10, filters: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
         """
         Find similar trials using vector search (cached)
@@ -40,10 +37,7 @@ class CachedTrialVectorStore(TrialVectorStore):
 
     @cached("trials_by_condition", ttl=3600)  # 1 hour
     def find_by_condition(
-        self,
-        condition: str,
-        phase: Optional[str] = None,
-        limit: int = 20
+        self, condition: str, phase: Optional[str] = None, limit: int = 20
     ) -> List[Dict[str, Any]]:
         """
         Find trials by medical condition (cached)
@@ -63,7 +57,7 @@ class CachedTrialVectorStore(TrialVectorStore):
         self,
         condition: Optional[str] = None,
         phase: Optional[str] = None,
-        limit: int = 20
+        limit: int = 20,
     ) -> List[Dict[str, Any]]:
         """
         Find successful trials (cached)
@@ -80,10 +74,7 @@ class CachedTrialVectorStore(TrialVectorStore):
 
     @cached("trials_by_sponsor", ttl=3600)  # 1 hour
     def find_by_sponsor(
-        self,
-        sponsor: str,
-        phase: Optional[str] = None,
-        limit: int = 20
+        self, sponsor: str, phase: Optional[str] = None, limit: int = 20
     ) -> List[Dict[str, Any]]:
         """
         Find trials by sponsor (cached)
@@ -140,7 +131,7 @@ class CachedTrialVectorStore(TrialVectorStore):
                 "trials_by_sponsor:*",
                 "trial_by_nct:*",
                 "trial_stats:*",
-                "recent_trials:*"
+                "recent_trials:*",
             ]
             total = 0
             for pat in patterns:

@@ -5,7 +5,7 @@ Redis caching service for clinical trial queries
 import redis
 import json
 import hashlib
-from typing import Any, Optional, Dict, List
+from typing import Any, Optional, Dict
 from functools import wraps
 from app.core.config import settings
 import logging
@@ -20,8 +20,7 @@ class CacheService:
         """Initialize Redis connection"""
         try:
             self.redis_client = redis.from_url(
-                settings.REDIS_URL,
-                decode_responses=True
+                settings.REDIS_URL, decode_responses=True
             )
             # Test connection
             self.redis_client.ping()
@@ -162,9 +161,8 @@ class CacheService:
                 "keyspace_hits": info.get("keyspace_hits", 0),
                 "keyspace_misses": info.get("keyspace_misses", 0),
                 "hit_rate": self._calculate_hit_rate(
-                    info.get("keyspace_hits", 0),
-                    info.get("keyspace_misses", 0)
-                )
+                    info.get("keyspace_hits", 0), info.get("keyspace_misses", 0)
+                ),
             }
         except Exception as e:
             logger.error(f"Error getting cache stats: {e}")
@@ -195,6 +193,7 @@ def cached(prefix: str, ttl: int = 3600):
         def search_trials(query):
             ...
     """
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -215,4 +214,5 @@ def cached(prefix: str, ttl: int = 3600):
             return result
 
         return wrapper
+
     return decorator
