@@ -1,0 +1,3 @@
+name: ctis-infrastructure
+runtime: python
+description: Clinical Trial Intelligence Platform Infrastructure on AWS

@@ -1,0 +1,4 @@
+config:
+  aws:region: us-east-1
+  ctis-infrastructure:db_password:
+    secure: your-secure-db-password-here
