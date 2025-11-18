@@ -60,4 +60,4 @@ An intelligent platform that:
 * GitHub Actions - CI/CD
 
 
-<div align="center">Built with ❤️</div>Réessayer
+<div align="center">Built with ❤️</div>
