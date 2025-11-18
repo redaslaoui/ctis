@@ -58,6 +58,3 @@ An intelligent platform that:
 * Pulumi - Infrastructure as Code
 * Docker - Containerization
 * GitHub Actions - CI/CD
-
-
-<div align="center">Built with ❤️</div>
